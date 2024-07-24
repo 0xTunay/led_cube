@@ -1,8 +1,6 @@
 #include <Arduino.h>
 
-#define PIN_2 2
-#define PIN_3 3
-#define PIN_4 4
+
 #define PIN_5 5
 #define PIN_6 6
 #define PIN_7 7
@@ -22,11 +20,12 @@
 #define PIN_A6 A6
 #define PIN_A7 A7 
 
+const int dataPin = 2;   // ds
+const int latchPin = 3;  // stcp
+const int clockPin = 4;  // shcp
+
 void setup() {
 
-    pinMode(PIN_2, OUTPUT);
-    pinMode(PIN_3, OUTPUT);
-    pinMode(PIN_4, OUTPUT);
     pinMode(PIN_5, OUTPUT);
     pinMode(PIN_6, OUTPUT);
     pinMode(PIN_7, OUTPUT);
@@ -38,6 +37,7 @@ void setup() {
     pinMode(PIN_13, OUTPUT);
 
     // Инициализация аналоговых пинов как цифровых
+    pinMode(PIN_A0, OUTPUT);
     pinMode(PIN_A1, OUTPUT);
     pinMode(PIN_A2, OUTPUT);
     pinMode(PIN_A3, OUTPUT);
@@ -45,7 +45,29 @@ void setup() {
     pinMode(PIN_A5, OUTPUT);
 
     pinMode(PIN_A6, INPUT);
+
+    pinMode(dataPin, OUTPUT);
+    pinMode(latchPin, OUTPUT);
+    pinMode(clockPin, OUTPUT);
 }
 
 void loop() {
+  digitalWrite(PIN_A3, HIGH);
+
+
+  byte ledData = 0b00001110;  
+
+  digitalWrite(latchPin, LOW);  
+  shiftOut(dataPin, clockPin, MSBFIRST, ledData); 
+  digitalWrite(latchPin, HIGH);
+
+  delay(1000); 
+
+  ledData = 0b00000000;  
+
+  digitalWrite(latchPin, LOW);  
+  shiftOut(dataPin, clockPin, MSBFIRST, ledData); 
+  digitalWrite(latchPin, HIGH);
+
+  delay(1000); 
 }
